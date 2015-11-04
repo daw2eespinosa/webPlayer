@@ -1,0 +1,51 @@
+/** {border:solid #000000 1px;}*/
+body{
+    /*background-color: #999999;*/
+}
+.element{}
+.progressbar{
+    opacity:0.8;
+    height: 18px;
+    z-index: 0;
+}
+.progress{
+    bottom: 11px;
+    opacity:1;
+    z-index: -1;
+    border: 0px transparent;
+    height: 2px;
+}
+.display{
+    z-index: -2;
+}
+.pointer{
+    cursor:pointer;
+}
+.pointer:hover{
+    color:#4cae4c;
+}
+.container{
+    padding-left: 0;
+    padding-right: 0;
+    background-color: transparent;
+}
+.timer{
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+.boxProgress{
+    height: 18px;
+}
+.volume{
+    height: 18px;
+}
+.controls{
+    height: 18px;
+}
+.menu{
+    bottom: 36px;
+}
+
+
+
+
