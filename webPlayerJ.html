@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="js/jquery.js"></script>
     <script>
         /**
          * 1. Set default params for all the elements:
@@ -15,37 +15,13 @@
          */
         var currentPosition;
         function webPlayer() {
-            var video = getVideo();
-            var volume = getVolume();
-            var webPlayer = getWebPlayer();
+            var video = getVideo()[0];
             setButtons(video);
             setDefaultOptions();
             configPitch();
-
-            volume.addEventListener("mousedown", function (event) {
-                setVolume(event);
-            }, true);
-            volume.addEventListener("mouseup", function (event) {
-                setVolume(event);
-            }, true);
-            video.addEventListener("play", function () {
-                setCurrentPosition(video)
-            }, true);
-            video.addEventListener("playing", function () {
-                whilePlaying(video)
-            }, true);
-            video.addEventListener("ended", function () {
-                toEnd(video)
-            }, false);
-//        webPlayer.addEventListener("mousemove", function(){toggleMenu()}, true);
-            webPlayer.addEventListener("mouseover", function () {
-                showMenu()
-            }, true);
-            webPlayer.addEventListener("mouseleave", function () {
-                hiddenMenu()
-            }, true);
-
-
+            setVolumeEvents();
+            setWebPlayerEvents();
+            setVideoEvents();
         }
 
         function setCurrentPosition(video) {
@@ -59,6 +35,38 @@
                 progress.value = video.currentTime;
                 getTimer().innerHTML = progressBar.value;
             }, step);
+        }
+        function setVolumeEvents() {
+            var volume = getVolume();
+            volume.mousedown(function (event) {
+                setVolume(event);
+            });
+            volume.mouseup(function (event) {
+                setVolume(event);
+            });
+        }
+        function setVideoEvents() {
+            var video = getVideo();
+            video.play(function () {
+                setCurrentPosition(video)
+            });
+            video.playing(function () {
+                whilePlaying(video)
+            });
+            video.ended(function () {
+                toEnd(video)
+            });
+        }
+        function setWebPlayerEvents() {
+            var webPlayer = getWebPlayer();
+            console.log("webPlayer", webPlayer);
+//        webPlayer.addEventListener("mousemove", function(){toggleMenu()}, true);
+            webPlayer.mouseover(function () {
+                showMenu()
+            });
+            webPlayer.mouseleave(function () {
+                hiddenMenu()
+            });
         }
         function configPitch() {
             var pitch = getPitch();
@@ -74,7 +82,7 @@
             }, true);
         }
         function setPitch(event) {
-            var video = getVideo();
+            var video = getVideo()[0];
             var pitch = getPitch();
             var pitchI;
             switch (event.type) {
@@ -95,7 +103,7 @@
         function configProgressBar(step) {
             var progressBar = getProgressBar();
             var progress = getProgress();
-            var video = getVideo();
+            var video = getVideo()[0];
 //        progressBar.position = 0;
 
             try {
@@ -123,7 +131,7 @@
 //        progressBar.addEventListener("mouseup", function (event){changePosition(event);});
         }
         function getPositionUnderCursor() {
-            var video = getVideo();
+            var video = getVideo()[0];
             var progressBar = getProgressBar();
             toPause(video);
             currentPosition = setInterval(function () {
@@ -134,7 +142,7 @@
         function movePosition() {
             var progressBar = getProgressBar();
             var position = progressBar.value;
-            var video = getVideo();
+            var video = getVideo()[0];
             resetCurrentPosition();
             video.currentTime = position;
             toPlay(video);
@@ -178,9 +186,11 @@
          }*/
 
         function setVolume(event) {
-            var video = getVideo();
+            var video = getVideo()[0];
             var volumeLevel;
-            var volume = getVolume();
+            var volume = getVolume()[0];
+            console.log(video.volume);
+            console.log(volume.value);
             switch (event.type) {
                 case "mousedown" :
                     volumeLevel = setInterval(function () {
@@ -188,6 +198,7 @@
                         console.log(video.volume);
                         volume.setAttribute("data-interval", volumeLevel)
                     }, 250);
+                    4
                     break;
                 case "mouseup" :
                     clearInterval(parseInt(volume.getAttribute("data-interval")));
@@ -196,9 +207,7 @@
                     console.log("If you are reading this, I am so bad writting code: setVolume");
             }
         }
-        function getTimer() {
-            return document.getElementById("actualPosition");
-        }
+
         function getStep(video) {
             return video.duration / (video.duration * 1000);
         }
@@ -234,8 +243,8 @@
         function setDefaultOptions() {
             var progress = getProgress();
             var progressBar = getProgressBar();
-            var video = getVideo();
-            var volume = getVolume();
+            var video = getVideo()[0];
+            var volume = getVolume()[0];
             progress.value = 0;
             progressBar.value = 0;
             video.muted = false;
@@ -245,27 +254,6 @@
             volume.value = 0.50;
             video.volume = volume.value;
         }
-        function getVolume() {
-            return document.getElementById("volume");
-        }
-        function getProgressBar() {
-            return document.getElementById("progressBar");
-        }
-        function getVideo() {
-            return document.getElementById("video");
-        }
-        function getWebPlayer() {
-            return document.getElementById("webPlayer");
-        }
-        function getMenu() {
-            return document.getElementById("menu");
-        }
-        function getProgress() {
-            return document.getElementById("progress");
-        }
-        function getPitch() {
-            return document.getElementById("pitch");
-        }
         function setButtons(video) {
             setButtonPlay(video);
             setButtonPause(video);
@@ -273,35 +261,75 @@
             setButtonMute(video);
             setButtonFullScreen();
         }
+        function getVolume() {
+            return $("#volume");
+        }
+        function getProgressBar() {
+            return $("#progressBar")[0];
+        }
+        function getVideo() {
+            return $("#video");
+        }
+        function getWebPlayer() {
+            return $("#webPlayer");
+        }
+        function getMenu() {
+            return $("#menu")[0];
+        }
+        function getProgress() {
+            return $("#progress")[0];
+        }
+        function getPitch() {
+            return $("#pitch")[0];
+        }
+        function getButtonPlay() {
+            return $("#play");
+        }
+        function getButtonPause() {
+            return $("#pause");
+        }
+        function getButtonStop() {
+            return $("#stop");
+        }
+        function getButtonMute() {
+            return $("#mute");
+        }
+        function getButtonFullScreen() {
+            return $("#fullScreen");
+        }
+        function getTimer() {
+            return $("#actualPosition")[0];
+        }
+
         function setButtonPlay(video) {
-            var button1 = document.getElementById("play");
-            button1.addEventListener("click", function () {
+            var buttonPlay = getButtonPlay();
+            buttonPlay.click(function () {
                 toPlay(video)
-            }, true);
+            });
         }
         function setButtonPause(video) {
-            var button2 = document.getElementById("pause");
-            button2.addEventListener("click", function () {
+            var buttonPause = getButtonPause();
+            buttonPause.click(function () {
                 toPause(video)
-            }, true);
+            });
         }
         function setButtonStop(video) {
-            var button3 = document.getElementById("stop");
-            button3.addEventListener("click", function () {
+            var buttonStop = getButtonStop();
+            buttonStop.click(function () {
                 toStop(video)
-            }, true);
+            });
         }
         function setButtonMute(video) {
-            var button4 = document.getElementById("mute");
-            button4.addEventListener("click", function () {
+            var buttonMute = getButtonMute();
+            buttonMute.click(function () {
                 toMute(video)
-            }, true);
+            });
         }
         function setButtonFullScreen() {
-            var button5 = document.getElementById("fullScreen");
-            button5.addEventListener("click", function () {
-                toggleFullScreen()
-            }, true);
+            var buttonFullScreen = getButtonFullScreen();
+            buttonFullScreen.click(function () {
+//                toggleFullScreen();
+            });
         }
         function toggleMenu() {
             var menu = getMenu();
@@ -321,7 +349,6 @@
     <link type="text/css" rel="stylesheet" href="css/main.css"/>
 
 </head>
-
 
 
 <body onload="webPlayer()">
@@ -345,33 +372,28 @@
         </div>
 
 
-
-
-
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 box controls" id="controls">
-
-
-
-
-
-
 
 
             <div class="col-xs-5 col-sm-4 col-md-4 col-lg-4 box">
                 <div class="pointer control button" id="play" title="play" accesskey="p">
                     <span class="glyphicon glyphicon-play icon"></span>
+
                     <p class="title">play</p>
                 </div>
                 <div class="pointer control button" id="pause" title="pause">
                     <span class="glyphicon glyphicon-pause icon"></span>
+
                     <p class=" title">pause</p>
                 </div>
                 <div class="pointer control button" id="stop" title="stop" accesskey="s">
-                <span class="glyphicon glyphicon-stop  icon"></span>
+                    <span class="glyphicon glyphicon-stop  icon"></span>
+
                     <p class=" title">stop</p>
                 </div>
                 <div class="pointer control button" id="mute" title="mute" accesskey="m">
-                <span class="glyphicon glyphicon-volume-off  icon"></span>
+                    <span class="glyphicon glyphicon-volume-off  icon"></span>
+
                     <p class=" title">mute</p>
                 </div>
             </div>
@@ -381,15 +403,18 @@
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 box">
                 <input type="range" class="col-xs-2 element box progressbar" name="volume" id="volume"
                        title="volume"/>
+
                 <p class="title">volume</p>
             </div>
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 box">
                 <input type="range" class="box progressbar" name="pitch" id="pitch" title="pitch"/>
+
                 <p class="title">pitch</p>
             </div>
             <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 box">
-                <div class="pointer control button"  id="fullScreen" title="full screen">
+                <div class="pointer control button" id="fullScreen" title="full screen">
                     <span class="glyphicon glyphicon-fullscreen  icon"></span>
+
                     <p class=" title">full</p>
                 </div>
             </div>
