@@ -137,8 +137,8 @@
         /** Functions to set Events */
         function setVideoEvents() {
             var video = getVideo();
-//TODO: refactor to get responsivity
-            var att = {visibility: "visible", height: "71px", opacity: "0.8"};
+            //TODO: refactor to get responsivity use a class visible.
+            /*var att = {visibility: "visible", height: "100px", opacity: "0.8"};*/
             video.on("play", function () {
                 setCurrentPosition(video[0]);
             });
@@ -149,7 +149,7 @@
                 toEnd(video[0]);
             });
             video.on("mousemove", function () {
-                doShowMenu(getMenu(), att, 1600);
+                doShowMenu(getMenu(), 1600);
             });
 
         }
@@ -162,7 +162,7 @@
             });
             menu.on("mouseleave", function () {
 //                doHideMenu();
-                doHideMenu(getMenu(), {height: "0", opacity: "0"}, 50);
+                doHideMenu(getMenu(), 50);
             });
         }
         function setTrackListEvents() {
@@ -476,30 +476,39 @@
             trackListHeight -= border;
             trackListHeight += "px";
             var buttonTrackList = getButtonTrackList();
+            //TODO: refactor this to be a class: visibility
+/*
             var att = {visibility: "visible", height: trackListHeight, opacity: "0.7"};
+*/
             buttonTrackList.click(function () {
-                doShowMenu(getTrackList(), att, 1600);
+                doShowMenu(getTrackList(), 1600);
             });
 
         }
         /** Functions to animate menus **/
 //TODO: I would like refactor this function to retrieve the attributes from the element and not like a parameter
-        function doShowMenu(element, attributes, time) {
+        //TODO: alternatively i would or need use classes to change the attributes: visible & hidden
+        function doShowMenu(element, time) {
             var webPlayer = getWebPlayer();
             var element = element;
+            var visible = $(element).attr("data-visible");
+            var hidden = $(element).attr("data-hidden");
             console.log(element.selector);
 //            var attributes = element[0].getAttribute("data-visible");
 //            console.log("echo attributes", attributes);
             if (element[0].getAttribute("data-timeout") == "undefined") {
-                doHideMenu(element, {height: "0", opacity: "0"}, time);
+                //TODO: refactor this to use a class: hidden
+                doHideMenu(element, time);
             } else {
                 clearTimeout(parseInt(element[0].getAttribute("data-timeout")));
-                doHideMenu(element, {height: "0", opacity: "0"}, time);
+                doHideMenu(element, time);
             }
-            for (var key in attributes) {
-                $(element).css(key, attributes[key])
-//                console.log($(element).css(key, attributes[key]));
-            }
+            $(element).removeClass(hidden);
+            $(element).addClass(visible);
+
+            console.log(visible);
+
+
             if (element.selector == "#trackList") {
                 var trackListHeight = webPlayer.height();
                 var border = (window.innerWidth / 100) * 2;
@@ -508,14 +517,15 @@
                 trackListHeight += "px";
                 $(element).css("height", trackListHeight);
             }
+
         }
-        function doHideMenu(element, attributes, time) {
+        function doHideMenu(element, time) {
             var element = element;
+            var visible = $(element).attr("data-visible");
+            var hidden = $(element).attr("data-hidden");
             var hide = setTimeout(function () {
-                for (var key in attributes) {
-                    $(element).css(key, attributes[key])
-//                console.log($(element).css(key, attributes[key]));
-                }
+                $(element).removeClass(visible);
+                $(element).addClass(hidden);
             }, time);
             element.attr("data-timeout", hide);
         }
@@ -652,6 +662,9 @@
             return div;
         }
         //TODO: a function to get the height of the window to set the height of the webplayer
+        function getWindowAvailableHeight(){
+            console.log(">", window.innerHeight);
+        }
         //TODO: function to get the resolution of the screen to set the resolution of the webPlayer
         //TODO: function to get the aspect ratio of the screeen to set the form factor of the webplayer
         //TODO: function to set the size by parameter
@@ -672,55 +685,61 @@
                     };
                 })();
         console.log(self.counter.increment());
-
+        getWindowAvailableHeight();
     </script>
 
+
+
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+    <link href="css/sample.css" type="text/css" rel="stylesheet"/>
     <link type="text/css" rel="stylesheet" href="css/main.css"/>
+
+
 
 </head>
 
 
 <body onload="webPlayer()">
-<div class="box col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2"
-     id="webPlayer">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 box display" id="display">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 video" id="boxVideo">
+<div class="boxx video" id="webPlayer">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 boxx video" id="display">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12  boxx video" id="boxVideo">
             <video class="video" id="video">
                 <!--<source src="Daft%20Punk%20ft.%20Pharrell%20Williams%20-%20Get%20Lucky%20(Official%20MTV%20Video).mp4" type="video/mp4"/>-->
-                <source src="ServerUbuntu-2015-10-28T17-51-22-745820000Z.webm" type="video/webm"/>
-                <!--<source src="./Jamiroquai%20-%20Canned%20Heat.mp4" type="video/mp4"/>-->
+                <!--<source src="ServerUbuntu-2015-11-04T17-59-21-367323000Z.webm" type="video/webm"/>-->
+                <source src="./Jamiroquai%20-%20Canned%20Heat.mp4" type="video/mp4"/>
                 <!--<source src="pesca.webm" type="video/webm"/>-->
                 <!--<source src="MOV_0003.MP4" type="video/mp4"/>-->
                 <!--<source src="dummy.mp4" type="video/mp4"/>-->
                 Your browser not support this video
             </video>
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 box menu" id="menu">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 boxx menu hiddenMenu" id="menu"
+                data-visible="visibleMenu" data-hidden="hiddenMenu"
+                >
 
-            <div class="box col-xs-12 col-sm-12 col-md-12 col-lg-12 boxProgress" id="boxProgress">
-                <input class="col-xs-12 progressbar box" type="range" name="progressBar" id="progressBar"
+            <div class="boxx col-xs-12 col-sm-12 col-md-12 col-lg-12 boxProgress" id="boxProgress">
+                <input class="col-xs-12 progressbar boxx" type="range" name="progressBar" id="progressBar"
                        title="current position"/>
-                <progress class="col-xs-12 progres box" id="progress"></progress>
+                <progress class="col-xs-12 progres boxx" id="progress"></progress>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 box controls" id="controls">
-                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 box" id="boxButtonsPlayBack"></div>
-                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 box" id="boxButtonsVolume"></div>
-                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 box">
-                    <input type="range" class="col-xs-2 element box progressbar" name="volume" id="volumeLeveler"
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 boxx controls" id="controls">
+                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 boxx" id="boxButtonsPlayBack"></div>
+                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 boxx" id="boxButtonsVolume"></div>
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 boxx">
+                    <input type="range" class="col-xs-2 element boxx progressbar" name="volume" id="volumeLeveler"
                            title="volume"/>
 
                     <p class="title">volume</p>
                 </div>
-                <div class="col-xs-1 col-sm-2 col-md-2 col-lg-2 box">
+                <div class="col-xs-1 col-sm-2 col-md-2 col-lg-2 boxx">
                     <p class="element timer" id="actualPosition">0:00</p>
                 </div>
-                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 box">
-                    <input type="range" class="box progressbar" name="pitch" id="pitch" title="pitch"/>
+                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 boxx">
+                    <input type="range" class="boxx progressbar" name="pitch" id="pitch" title="pitch"/>
 
                     <p class="title">pitch</p>
                 </div>
-                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 box">
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 boxx">
                     <div class="pointer control button" id="fullScreen" title="full screen">
                         <span class="glyphicon glyphicon-fullscreen  icon"></span>
 
@@ -734,7 +753,7 @@
                 </div>
             </div>
         </div>
-        <div class="box trackList" id="trackList">
+        <div class="boxx trackList" id="trackList">
             <ul class="" id="pantones">
             </ul>
         </div>

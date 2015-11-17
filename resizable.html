@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="js/jquery.js"></script>
+    <link href="css/sample.css" type="text/css" rel="stylesheet"/>
+</head>
+<body style="background-color: #122b40">
+<div id="box">
+    <div class="box">PAROLE</div>
+    <div class="box">1</div>
+    <div class="box">1</div>
+    <div class="box">reproducir</div>
+    <div class="box">volumen</div>
+    <div class="box">1</div>
+    <div class="box">1</div>
+    <div class="box">1</div>
+    <div class="box">1</div>
+    <div class="box">1</div>
+    <div class="box">1</div>
+    <div class="box">1</div>
+    <p id="text" >PALABRA palabra PALABRA palabra PALABRA palabra PALABRA palabra </p>
+    <p>PALABRASPALABRASPALABRASPALABRASPALABRASPALABRASPALABRASPALABRASPALABRASPALABRAS</p>
+</div>
+<script>
+    var ratio = screen.height / screen.width;
+    var ratio1 = screen.width / screen.height;
+
+    var text = document.getElementById("text");
+    var box = document.getElementById("box");
+
+    text.innerHTML =
+            screen.width + " " +
+            screen.height + " " +
+            screen.availWidth + " " +
+            screen.availHeight + " " +
+            window.innerWidth + " " +
+            window.innerHeight + " " +
+            window.outerWidth + " " +
+            window.outerHeight + " " +
+            box.style.width + " " +
+            box.style.height + " " +
+            window.ratio;
+
+    const threeToTwo = 3 / 2;
+    const fourToThree = 4 / 3;
+    const fiveToThree = 5 / 3;
+    const fiveToFour = 5 / 4;
+    const eightToFive = 8 / 5;
+    const sixteenToNine = 16 / 9;
+    const sevenTeenToNine = 17 / 9;
+    const slides = 1.48;
+    const widescreen = 1.85;
+
+    //TODO: First set the ratio of screen
+    console.log("window.innerHeight", window.innerHeight);
+    console.log("window.innerWidth", window.innerWidth);
+    console.log("window.outerHeight", window.outerHeight);
+    console.log("window.outerWidth", window.outerWidth);
+    console.log("window.screenX", window.screenX);
+    console.log("window.screenY", window.screenY);
+
+    console.log("screen.height", screen.height);
+    console.log("screen.width", screen.width);
+    console.log("screen.availHeight", screen.availHeight);
+    console.log("screen.availWidth", screen.availWidth);
+
+    switch (ratio || ratio1) {
+        case threeToTwo :
+            console.log("threeToTwo");
+            break;
+        case fourToThree :
+            console.log("fourToThree");
+            break;
+        case fiveToThree :
+            console.log("fiveToThree");
+            break;
+        case fiveToFour :
+            console.log("fiveToFour");
+            break;
+        case eightToFive :
+            console.log("eightToFive");
+            break;
+        case sixteenToNine :
+            console.log("sixteenToNine");
+            break;
+        case sevenTeenToNine :
+            console.log("sevenTeenToNine");
+            break;
+    }
+</script>
+</body>
+</html>

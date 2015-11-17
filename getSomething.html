@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script>
+        var newObject = {
+            attribute: "es",
+            numeric: 1.21,
+            doOperation: function (value) {
+                return value * this.numeric;/*(this.attribute == "es") ? this.numeric : this.numeric;*/
+            }
+        }
+        console.log("execute the function of an object", newObject.doOperation(100));
+        console.log("binding attributes", whatElse = newObject.doOperation.bind({attribute: "uk", numeric: 1.18}));
+        console.log("calling a function bound", whatElse(100));
+
+
+        function newFunction(value) {
+//            var attribute = "es"; // this variable is not necessary
+            var numeric = 1.42;
+            return (this.attribute != undefined) ? value * this.numeric : value * numeric;
+        }
+        console.log("execute a new function", newFunction(100));
+        console.log("binding attributes", nothingMore = newFunction.bind({attribute: "uk", numeric: 1.36}));
+        console.log("calling the function with a bound attributes", nothingMore(100));
+
+        var otherObject = {
+            doOperation: function (value) {
+//                var attribute = "es";
+                var numeric = 1.63;
+                return (this.attribute != undefined) ? value * this.numeric : value * numeric;
+            }
+        }
+        console.log("execute the function of an object", otherObject.doOperation(100));
+        console.log("binding attributes", mandrake = otherObject.doOperation.bind({attribute:"uk", numeric:1.54}));
+        console.log("calling the function with a bound attributes", mandrake(100));
+
+
+
+
+        var newObject1 = {
+            attribute: "es",
+            numeric: 1.21,
+            value:100,
+            doOperation: function () {
+                return (this.attribute == "es") ? this.value * this.numeric : this.value * this.numeric;
+            }
+        }
+        console.log("execute the function of an object", newObject1.doOperation());
+        console.log("binding attributes", newObject1.doOperation = newObject1.doOperation.bind({attribute: "uk", numeric: 1.18, value:newObject1.value}));
+        console.log("calling a function bound", newObject1.doOperation());
+
+
+
+
+
+
+    </script>
+
+</head>
+<body>
+
+</body>
+</html>
